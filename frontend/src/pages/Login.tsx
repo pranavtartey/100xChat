@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
 import { LoginFormSchema } from "@/types";
 import { ChangeEvent, ChangeEventHandler, useState } from "react";
 import { z } from "zod";
@@ -15,12 +16,11 @@ import { z } from "zod";
 type LoginFormType = z.infer<typeof LoginFormSchema>;
 
 const Login = () => {
+  const { toast } = useToast();
   const [inputValue, setInputValue] = useState<LoginFormType>({
     username: "",
     password: "",
   });
-
-  const [error, setError] = useState<{ message: string }>({ message: "" });
 
   const changeHandler: ChangeEventHandler<HTMLInputElement> = (
     event: ChangeEvent<HTMLInputElement>
@@ -35,10 +35,12 @@ const Login = () => {
   const submitHandler = () => {
     const parsedData = LoginFormSchema.safeParse(inputValue);
     if (!parsedData.success) {
-      setError({ message: parsedData.error.issues[0].message });
+      toast({
+        title : "Error",
+        description : parsedData.error.issues[0].message
+      })
       return;
     }
-    setError({ message: "" });
     console.log(parsedData);
   };
 
@@ -76,11 +78,6 @@ const Login = () => {
                 value={inputValue.password}
                 onChange={changeHandler}
               />
-              {error.message && (
-                <p className="text-sm dark:text-red-300/80 text-red-600">
-                  {error.message}
-                </p>
-              )}
             </div>
           </form>
         </CardContent>

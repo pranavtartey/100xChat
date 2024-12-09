@@ -1,17 +1,23 @@
-import { ModeToggle } from "@/components/mode-toggle";
-import { Outlet } from "react-router";
+import { Outlet, useNavigate } from "react-router";
 
 const RootLayout = () => {
+  const navigate = useNavigate();
+  const clickHandler = () => {
+    navigate("/");
+  };
   return (
     <>
-      <div className="p-4 flex justify-between items-center backdrop-blur fixed w-full ">
+      <div className="p-2 flex justify-between items-center backdrop-blur fixed bg-[#A594F9] w-full z-10">
         <div className="">
-          <h1 className="text-xl font-semibold cursor-default">100xChat</h1>
-        </div>
-        <div>
-          <ModeToggle />
+          <h1
+            className="text-2xl cursor-default text-[#E5D9F2] font-bold"
+            onClick={clickHandler}
+          >
+            100xChat
+          </h1>
         </div>
       </div>
+      <br />
       <Outlet />
     </>
   );
